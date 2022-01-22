@@ -1,4 +1,4 @@
-FROM alpine:3.13.4
+FROM alpine:3.14.0
 
 RUN apk add --update \
 	bash \
@@ -18,8 +18,7 @@ RUN npm install -g \
 	less less-plugin-autoprefix less-plugin-clean-css \
     uglify-js
 
-COPY ./docker-entrypoint.sh /usr/bin/docker-entrypoint
-COPY ./load-env-npmrc.js /usr/bin/load-env-npmrc
+COPY bin/* /bin/
 
 ENTRYPOINT ["docker-entrypoint"]
 
