@@ -14,10 +14,14 @@ test -v GITLAB_USER_EMAIL || (echo "Missing GITLAB_USER_EMAIL variable" && exit 
 GIT_URL=$(url-add-auth $CI_REPOSITORY_URL $GITAUTH_USER $GITAUTH_PASS)
 
 # Set version in package.json
+echo "Updating package.json"
 npm-set-version ${1}
+echo "Committing package.json"
 git commit --author="${GITLAB_USER_NAME} <${GITLAB_USER_EMAIL}>" -m ${1} package.json
 
+echo "Creating tag"
 git tag ${1}
 
 # Push to URL
+echo "Pushing changes to remote"
 git push ${GIT_URL} ${1}
