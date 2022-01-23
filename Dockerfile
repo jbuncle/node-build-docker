@@ -1,4 +1,4 @@
-FROM alpine:3.14.0
+FROM alpine:3.15.0
 
 RUN apk add --update \
 	bash \
@@ -10,7 +10,7 @@ RUN apk add --update \
 	build-base \
 	gcc \
 	g++ \
-	nodejs nodejs-npm
+	nodejs npm
 
 
 RUN npm install -g \
