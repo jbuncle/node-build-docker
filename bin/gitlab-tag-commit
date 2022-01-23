@@ -16,8 +16,13 @@ GIT_URL=$(url-add-auth $CI_REPOSITORY_URL $GITAUTH_USER $GITAUTH_PASS)
 # Set version in package.json
 echo "Updating package.json"
 npm-set-version ${1}
+
+echo "Updated git config to set user name and email"
+git config --global user.email "${GITLAB_USER_EMAIL}"
+git config --global user.name "${GITLAB_USER_NAME}"
+
 echo "Committing package.json"
-GIT_AUTHOR_EMAIL="${GITLAB_USER_EMAIL}" GIT_AUTHOR_NAME="${GITLAB_USER_NAME}" git commit --author="${GITLAB_USER_NAME} <${GITLAB_USER_EMAIL}>" -m ${1} package.json
+git commit --author="${GITLAB_USER_NAME} <${GITLAB_USER_EMAIL}>" -m ${1} package.json
 
 echo "Creating tag"
 git tag ${1}
