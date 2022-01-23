@@ -2,15 +2,26 @@
 
 Docker image for building node projects (that publish and use a private repository).
 
-## Environment Variables
+## Main Environment Variables
 
-| Variable             | Description                            |
-| -------------------- | -------------------------------------- |
-| NPM_REGISTRY         | Default NPM Registry                   |
-| NPM_USER             | Default NPM Registry username for auth |
-| NPM_PASS             | Default NPM Registry password for auth |
-| NPM_REGISTRY_{SCOPE} | URL to repository with auth            |
+The entrypoint script will generate the .npmrc file with necessary repositories.
 
-## Maintainer
+| Variable             | Description                                |
+| -------------------- | ------------------------------------------ |
+| NPM_REGISTRY         | Default NPM Registry                       |
+| NPM_USER             | Default NPM Registry username for auth     |
+| NPM_PASS             | Default NPM Registry password for auth     |
+| NPM_REGISTRY_{SCOPE} | URL to repository (can include basic auth) |
 
-This repository is maintained by [www.cyberpear.co.uk](https://www.cyberpear.co.uk).
+
+## Utility Scripts
+
+| Script                     | Description                                                                                                 |
+| -------------------------  | ----------------------------------------------------------------------------------------------------------- |
+| `git-current-verson`       | Get the most recent Git tag from history, defaulting to 1.0.0                                               |
+| `gitlab-tag`               | Using GitLab CI variables, increments last Git tag semver (patch) and commits version update (with new tag) |
+| `gitlab-tag-commit`        | Using GitLab CI variables, sets version in package.json and commits change with new tag                     |
+| `increment-version`        | Given a semver version, increments by given amount (e.g `increment-version path 1.0.0`)                     |
+| `npm-set-version`          | Set version in package.json (e.g `npm-set-version 1.0.0`)                                                   |
+| `url-add-auth`             | Adds given credentions to given url - `url-add-auth <url> <user> <pass>`                                    |
+
