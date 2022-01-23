@@ -1,0 +1,39 @@
+#!/usr/bin/env node
+
+const regex = /v?(\d+)\.(\d+)(\.(\d+))?/gm;
+const increment = process.argv[2];
+const version = process.argv[3];
+
+const match = regex.exec(version);
+
+if (match !== null) {
+    // This is necessary to avoid infinite loops with zero-width matches
+    if (match.index === regex.lastIndex) {
+        regex.lastIndex++;
+    }
+
+    let major = parseInt(match[1]);
+    let minor = parseInt(match[2]);
+
+    let patch = match[4];
+    if (typeof patch === 'undefined' || patch === null || patch === undefined) {
+        patch = 0;
+    } else {
+        patch = parseInt(patch)
+    }
+
+    switch (increment.toUpperCase()) {
+        case "MAJOR":
+            major++;
+            break;
+        case "MINOR":
+            minor++;
+            break;
+        case "PATCH":
+            patch++;
+            break;
+    }
+    console.log(major + '.' + minor + '.' + patch);
+} else {
+    process.exit(1);
+}

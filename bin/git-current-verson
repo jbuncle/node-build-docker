@@ -1,0 +1,17 @@
+#!/bin/bash
+# Get the most recent Git tag from history, defaulting to 1.0.0
+
+set -e
+set -u
+
+# Refresh tags
+git fetch --tags --prune &> /dev/null
+
+# Check for existing tags
+if [ "$(git ls-remote --tags &> /dev/null ; echo $?)" != "0" ] ; then 
+    # Default version
+    echo '1.0.0'
+else
+    # Lookup latest version
+    echo $(git describe --tags `git rev-list --tags --max-count=1`)
+fi

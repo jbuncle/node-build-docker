@@ -1,0 +1,23 @@
+#!/bin/bash
+# Updates package.json, commits and pushes git tag with given version
+# This creates a new commit with package.json update in it
+set -e
+
+
+# Check for required variables are defined
+test -v GITAUTH_USER      || (echo "Missing GITAUTH_USER variable" && exit 1)
+test -v GITAUTH_PASS      || (echo "Missing GITAUTH_PASS variable" && exit 1)
+test -v CI_REPOSITORY_URL || (echo "Missing CI_REPOSITORY_URL variable" && exit 1)
+test -v GITLAB_USER_NAME  || (echo "Missing GITLAB_USER_NAME variable" && exit 1)
+test -v GITLAB_USER_EMAIL || (echo "Missing GITLAB_USER_EMAIL variable" && exit 1)
+
+GIT_URL=$(url-add-auth $CI_REPOSITORY_URL $GITAUTH_USER $GITAUTH_PASS)
+
+# Set version in package.json
+npm-set-version ${1}
+git commit --author="${GITLAB_USER_NAME} <${GITLAB_USER_EMAIL}>" -m ${1} package.json
+
+git tag ${1}
+
+# Push to URL
+git push ${GIT_URL} ${1}

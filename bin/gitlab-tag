@@ -1,0 +1,13 @@
+#!/bin/bash
+# Increments last Git tag semver (patch) and commits version update (with new tag)
+set -e
+
+GIT_URL=$(url-add-auth $CI_REPOSITORY_URL $GITAUTH_USER $GITAUTH_PASS)
+
+CURRENT_VERSION=$(git-current-version)
+NEXT_VERSION=$(increment-version patch ${CURRENT_VERSION})
+
+echo "Current version: ${CURRENT_VERSION}"
+echo "New version:     ${NEXT_VERSION}"
+
+gitlab-tag-commit ${NEXT_VERSION}
