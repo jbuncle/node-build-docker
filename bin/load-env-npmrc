@@ -85,7 +85,7 @@ function loadProperties() {
 
         if (key.startsWith('NPM_SCOPE_')) {
 
-            const scope = key.substr(14).toLowerCase();
+            const scope = key.substr('NPM_SCOPE_'.length).toLowerCase();
             const value = env[key];
 
             loadScopedRegistry(npmrcProperties, scope, value);
@@ -93,7 +93,7 @@ function loadProperties() {
 
         if (key.startsWith('NPM_REGISTRY_')) {
 
-            const scope = key.substr(13).toLowerCase();
+            const scope = key.substr('NPM_REGISTRY_'.length).toLowerCase();
             const value = env[key];
 
             loadRegistry(npmrcProperties, value);
