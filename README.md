@@ -6,12 +6,13 @@ Docker image for building node projects (that publish and use a private reposito
 
 The entrypoint script will generate the .npmrc file with necessary repositories.
 
-| Variable             | Description                                |
-| -------------------- | ------------------------------------------ |
-| NPM_REGISTRY         | Default NPM Registry                       |
-| NPM_USER             | Default NPM Registry username for auth     |
-| NPM_PASS             | Default NPM Registry password for auth     |
-| NPM_REGISTRY_{SCOPE} | URL to repository (can include basic auth) |
+| Variable              | Description                                |
+| --------------------- | ------------------------------------------ |
+| NPM_REGISTRY          | Default NPM Registry                       |
+| NPM_USER              | Default NPM Registry username for auth     |
+| NPM_PASS              | Default NPM Registry password for auth     |
+| NPM_SCOPE_{SCOPE}     | Add scope URL to repository (can include basic auth) |
+| NPM_REGISTRY_{NAME}   | URL with auth to add login for a registry  |
 
 
 ## Utility Scripts

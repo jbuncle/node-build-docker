@@ -7,6 +7,45 @@ function base64(string) {
     return Buffer.from(string).toString('base64')
 }
 
+/**
+ * Load a scoped registry.
+ *
+ * @param {object} npmrcProperties
+ * @param {string} scope
+ * @param {string} value
+ * @returns {undefined}
+ */
+function loadScopedRegistry(npmrcProperties, scope, value) {
+    const registryUrl = new url.URL(value);
+
+    const registryHost = registryUrl.hostname;
+    const registryPath = registryUrl.pathname;
+
+
+    npmrcProperties['@' + scope + ':registry'] = registryUrl.protocol + '//' + registryHost + registryPath;
+
+    loadRegistry(npmrcProperties, value);
+}
+
+
+function loadRegistry(npmrcProperties, value) {
+    const registryUrl = new url.URL(value);
+
+    const registryHost = registryUrl.hostname;
+    const registryPath = registryUrl.pathname;
+
+    const username = registryUrl.username;
+    const password = registryUrl.password;
+
+    if (username) {
+        npmrcProperties['//' + registryHost + registryPath + ':username'] = username;
+    }
+    if (password) {
+        npmrcProperties['//' + registryHost + registryPath + ':_password'] = base64(password);
+    }
+
+}
+
 function loadProperties() {
     const env = process.env;
 
@@ -44,32 +83,22 @@ function loadProperties() {
 
     for (const key in env) {
 
-        if (!key.startsWith('NPM_REGISTRY_')) {
-            continue;
-        }
+        if (key.startsWith('NPM_SCOPE_')) {
 
-        const scope = key.substr(13).toLowerCase();
-
-        if (Object.hasOwnProperty.call(env, key)) {
+            const scope = key.substr(14).toLowerCase();
             const value = env[key];
 
-            const registryUrl = new url.URL(value);
-
-            const registryHost = registryUrl.hostname;
-            const registryPath = registryUrl.pathname;
-
-            const username = registryUrl.username;
-            const password = registryUrl.password;
-
-            npmrcProperties['@' + scope + ':registry'] = registryUrl.protocol + '//' + registryHost + registryPath;
-
-            if (username) {
-                npmrcProperties['//' + registryHost + registryPath + ':username'] = username;
-            }
-            if (password) {
-                npmrcProperties['//' + registryHost + registryPath + ':_password'] = base64(password);
-            }
+            loadScopedRegistry(npmrcProperties, scope, value);
         }
+
+        if (key.startsWith('NPM_REGISTRY_')) {
+
+            const scope = key.substr(13).toLowerCase();
+            const value = env[key];
+
+            loadRegistry(npmrcProperties, value);
+        }
+
     }
     return npmrcProperties;
 }
